@@ -1,7 +1,7 @@
 # software_testing 
 Выбранное для тестирования ПО - Converter (проект по ТРПП со 2-ого курса)
 
-Состав команды:
+Состав команды Frik Party:
 + [Погодин Вадим Витальевич](https://github.com/vadimmpog)
 + [Горбенко Артем Дмитриевич](https://github.com/Thunderbirrd)
 + [Ромайкин Игорь Дмитриевич](https://github.com/Ygrick)
