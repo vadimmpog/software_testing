@@ -21,6 +21,7 @@
 ## Найденные методом чёрного ящика баги
 
 ##### Баг №1
+<span align="center"><img src="https://sun9-45.userapi.com/impg/wLhFlpf8naXd9bJI2DWSSC3fsqgZ8jbte3vNDQ/hdNTTPUUUCI.jpg?size=800x1600&quality=96&sign=1089ba83b57df2a9b72c890f7dd8fb28&type=album" width="350dp"></span><br>
 Невозможность использования конвертатора валют с нецелыми числами
 Данная ошибка является ошибкой поля пользовательского ввода
  
