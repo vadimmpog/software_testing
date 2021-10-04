@@ -14,8 +14,6 @@ FILE_DATA = 'Credentials\n' \
             'CVV: 456\n' \
             'Other important private information\n'
 
-IS_WIN = sys.platform.startswith('win')
-
 
 class TestCreator:
 
@@ -32,34 +30,25 @@ class TestCreator:
         assert file.read() == FILE_DATA * 10
 
 
-@pytest.mark.Win
+@pytest.mark.skipif(not sys.platform.startswith("win"), reason="not Windows")
 class TestShredderWindows:
 
-    @pytest.mark.V1
     def test_overwrite_file(self):
         file = open(FILE_NAME, 'w+')
         for _ in range(0, random.randint(0, 150)):
-            file.write(str(random.randint(0, 128)) + " ")
+            file.write(chr(random.randint(0, 128)) + " ")
+        assert not file.read() == FILE_DATA * 10
 
-    @pytest.mark.V1
-    def test_rename_file(self):
-        new_name = ''
-        for i in range(0, random.randint(0, 20)):
-            new_name += chr(i * 6)
-        os.rename(FILE_NAME, new_name)
-
-    @pytest.mark.V1
-    @pytest.mark.V2
     def test_delete_file(self):
         os.remove(FILE_PATH)
         assert not os.path.isfile(FILE_PATH)
 
-    @pytest.mark.V2
+    @pytest.mark.skip
     def test_cipher_file(self):
         assert os.system(f'cipher /w:{PATH}') == 0
 
 
-@pytest.mark.Linux
+@pytest.mark.skipif(sys.platform.startswith("win"), reason="not Linux")
 class TestShredderLinux:
 
     def test_shred_file(self):
