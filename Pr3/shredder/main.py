@@ -2,6 +2,7 @@ import os
 
 PATH = os.path.dirname(__file__)
 FILE_NAME = 'testfile.txt'
+FILE_PATH = os.path.join(PATH, FILE_NAME)
 FILE_DATA = 'Credentials\n' \
             'Email: somemail@gmail.com\n' \
             'Password: secret\n' \
@@ -14,7 +15,7 @@ class TestCreator:
     def test_create_file(self):
         file = open(FILE_NAME, 'w')
         file.close()
-        assert os.path.isfile('')
+        assert os.path.isfile(FILE_PATH)
 
     def test_fill_file(self):
         file = open(FILE_NAME, 'w+')
@@ -27,9 +28,12 @@ class TestCreator:
 class TestShredder:
 
     def test_delete_file(self):
-        assert None
+        os.remove(FILE_PATH)
+        assert not os.path.isfile(FILE_PATH)
 
     def test_cipher_file(self):
+        # os.
+        'cipher /w:driveletter:\foldername'
         assert None
 
 
