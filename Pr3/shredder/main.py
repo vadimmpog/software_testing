@@ -35,25 +35,32 @@ class TestCreator:
 @pytest.mark.Win
 class TestShredderWindows:
 
+    @pytest.mark.V1
     def test_overwrite_file(self):
         file = open(FILE_NAME, 'w+')
-        for _ in range(0, random.randint(0, 1) * 50):
-            file.write(str(random.randint(0, 1)) + " ")
+        for _ in range(0, random.randint(0, 150)):
+            file.write(str(random.randint(0, 128)) + " ")
 
+    @pytest.mark.V1
+    def test_rename_file(self):
+        new_name = ''
+        for i in range(0, random.randint(0, 20)):
+            new_name += chr(i * 6)
+        os.rename(FILE_NAME, new_name)
+
+    @pytest.mark.V1
+    @pytest.mark.V2
     def test_delete_file(self):
         os.remove(FILE_PATH)
         assert not os.path.isfile(FILE_PATH)
 
     @pytest.mark.V2
     def test_cipher_file(self):
-        if IS_WIN:
-            os.system(f'cipher /w:{PATH}')
-        assert None
+        assert os.system(f'cipher /w:{PATH}') == 0
 
 
 @pytest.mark.Linux
 class TestShredderLinux:
 
     def test_shred_file(self):
-        os.system(f'shred -u {FILE_PATH}')
-        assert None
+        assert os.system(f'shred -u {FILE_PATH}') == 0
