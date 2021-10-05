@@ -31,7 +31,7 @@ class ShredderWindows:
     def overwrite_file(self):
         file = open(self.file_path, 'w+')
         for _ in range(0, random.randint(0, 150)):
-            file.write(chr(random.randint(0, 128)) + " ")
+            file.write(chr(random.randint(95, 120)) + " ")
         file.close()
 
     def delete_file(self):
@@ -67,7 +67,13 @@ if __name__ == '__main__':
     if sys.platform.startswith("win"):
         shredder = ShredderWindows(file_name, path)
         shredder.overwrite_file()
-        shredder.cipher_file()
+        method = input('On windows you can choose method v1 or v2:\n')
+        if method == 'v1':
+            shredder.delete_file()
+        elif method == 'v2':
+            shredder.cipher_file()
+        else:
+            print('Wrong method')
     else:
         shredder = ShredderLinux(file_name, path)
         shredder.shred_file()
