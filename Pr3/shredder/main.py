@@ -2,54 +2,72 @@ import os
 import random
 import sys
 
-import pytest
 
-PATH = os.path.dirname(__file__)
-FILE_NAME = 'testfile'
-FILE_PATH = os.path.join(PATH, FILE_NAME)
-FILE_DATA = 'Credentials\n' \
-            'Email: somemail@gmail.com\n' \
-            'Password: secret\n' \
-            'Bank card: 13214564797\n' \
-            'CVV: 456\n' \
-            'Other important private information\n'
+class Creator:
 
+    def __init__(self, file_name, file_data, path) -> None:
+        self.path = os.path.dirname(__file__)
+        self.file_name = file_name
+        self.file_path = os.path.join(path, file_name)
+        self.file_data = file_data
 
-class TestCreator:
-
-    def test_create_file(self):
-        file = open(FILE_NAME, 'w')
+    def create_file(self):
+        file = open(self.file_name, 'w')
         file.close()
-        assert os.path.isfile(FILE_PATH)
 
-    def test_fill_file(self):
-        file = open(FILE_NAME, 'w+')
-        file.write(FILE_DATA * 10)
+    def fill_file(self):
+        file = open(self.file_name, 'w+')
+        file.write(self.file_data * 10)
         file.close()
-        file = open(FILE_NAME, 'r')
-        assert file.read() == FILE_DATA * 10
 
 
-@pytest.mark.skipif(not sys.platform.startswith("win"), reason="not Windows")
-class TestShredderWindows:
+class ShredderWindows:
 
-    def test_overwrite_file(self):
-        file = open(FILE_NAME, 'w+')
+    def __init__(self, file_name, path) -> None:
+        self.path = path
+        self.file_name = file_name
+        self.file_path = os.path.join(path, file_name)
+
+    def overwrite_file(self):
+        file = open(self.file_path, 'w+')
         for _ in range(0, random.randint(0, 150)):
             file.write(chr(random.randint(0, 128)) + " ")
-        assert not file.read() == FILE_DATA * 10
+        file.close()
 
-    def test_delete_file(self):
-        os.remove(FILE_PATH)
-        assert not os.path.isfile(FILE_PATH)
+    def delete_file(self):
+        os.remove(self.file_path)
 
-    @pytest.mark.skip
-    def test_cipher_file(self):
-        assert os.system(f'cipher /w:{PATH}') == 0
+    def cipher_file(self):
+        return os.system(f'cipher /w:{self.path}') == 0
 
 
-@pytest.mark.skipif(sys.platform.startswith("win"), reason="not Linux")
-class TestShredderLinux:
+class ShredderLinux:
 
-    def test_shred_file(self):
-        assert os.system(f'shred -u {FILE_PATH}') == 0
+    def __init__(self, file_name, path) -> None:
+        self.path = path
+        self.file_name = file_name
+        self.file_path = os.path.join(path, file_name)
+
+    def shred_file(self):
+        return os.system(f'shred -u {self.file_path}') == 0
+
+
+if __name__ == '__main__':
+    path = os.path.dirname(__file__)
+    file_name = 'testfile'
+    file_data = 'Credentials\n' \
+                'Email: somemail@gmail.com\n' \
+                'Password: secret\n' \
+                'Bank card: 13214564797\n' \
+                'CVV: 456\n' \
+                'Other important private information\n'
+    creator = Creator(file_name, file_data, path)
+    creator.create_file()
+    creator.fill_file()
+    if sys.platform.startswith("win"):
+        shredder = ShredderWindows(file_name, path)
+        shredder.overwrite_file()
+        shredder.cipher_file()
+    else:
+        shredder = ShredderLinux(file_name, path)
+        shredder.shred_file()
